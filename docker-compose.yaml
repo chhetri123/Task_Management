@@ -1,0 +1,26 @@
+version: "3.1"
+services:
+  backend:
+    build: ./Backend
+    container_name: task_management_backend
+    volumes:
+      - ./Backend:/usr/src/app
+    command: npm run dev
+    env_file:
+      - ./Backend/config.env
+    environment:
+      - MONGODB_URI_DEV=mongodb://root:example@mongo_db:27017/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo_db
+
+  mongo_db:
+    image: mongo
+    container_name: mongo_db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - "27017:27017"
