@@ -3,7 +3,17 @@ require("dotenv").config({ path: `${__dirname}/config.env` });
 const app = require("./index");
 
 const port = process.env.PORT || 8000;
-const db = process.env.DB.replace("<PASSWORD>", process.env.DB_PASSWORD);
+
+let db;
+if (process.env.NODE_ENV === "development") {
+  db = process.env.MONGODB_URI_DEV;
+} else if (process.env.NODE_ENV === "production") {
+  db = process.env.MONGODB_URI_PROD.replace(
+    "<PASSWORD>",
+    process.env.DB_PASSWORD
+  );
+}
+
 mongoose
   .connect(db)
   .then(() => {
