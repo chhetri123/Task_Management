@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const { MODEL, PRIORITY_LEVELS, STATUS } = require("../utils/constant");
 
+// Task Schema for MongoDB
 const taskSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -13,17 +15,17 @@ const taskSchema = new mongoose.Schema({
     type: String,
   },
   status: {
-    type: Boolean,
+    type: String,
     required: true,
-    enum: ["open", "in progress", "completed"],
-    default: "open",
+    enum: [STATUS.OPEN, STATUS.IN_PROGRESS, STATUS.COMPLETED],
+    default: STATUS.OPEN,
     validator: [validator.isIn, "Please provide valid status"],
   },
 
   priority: {
     type: String,
-    enum: ["low", "medium", "high"],
-    default: "medium",
+    enum: [PRIORITY_LEVELS.LOW, PRIORITY_LEVELS.MEDIUM, PRIORITY_LEVELS.HIGH],
+    default: PRIORITY_LEVELS.LOW,
     validator: [validator.isIn, "Please provide valid priority"],
   },
 
@@ -32,16 +34,24 @@ const taskSchema = new mongoose.Schema({
       type: String,
       trim: true,
       maxlength: [10, "Tag must be at most 10 characters"],
+      default: [],
     },
   ],
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: MODEL.USER_MODEL,
     required: true,
     validator: [validator.isMongoId, "Please provide valid owner"],
   },
   dueDate: {
     type: Date,
+    required: true,
+    validate: {
+      validator: function (date) {
+        return new Date(date) > Date.now();
+      },
+      message: "Please provide valid due date",
+    },
   },
   createdAt: {
     type: Date,
@@ -53,18 +63,16 @@ const taskSchema = new mongoose.Schema({
   },
 });
 
-userSchema.pre("findOneAndUpdate", function (next) {
+// Pre Middleware for updating the updatedAt field
+taskSchema.pre("findOneAndUpdate", function (next) {
   this.set({ updatedAt: Date.now() });
   next();
 });
 
-userSchema.pre("updateOne", function (next) {
-  this.set({ updatedAt: Date.now() });
-  next();
-});
+// Pre Middleware for updating the updatedAt field
 taskSchema.pre("up", function (next) {
   this.updatedAt = Date.now();
   next();
 });
 
-module.exports = mongoose.model("Task", taskSchema);
+module.exports = mongoose.model(MODEL.TASK_MODEL, taskSchema);

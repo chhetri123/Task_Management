@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 const crypto = require("crypto");
+const { MODEL, ROLE } = require("../utils/constant");
+
+// User Schema for MongoDB
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -9,8 +12,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["user", "admin"],
-    default: "user",
+    enum: [ROLE.ADMIN, ROLE.USER],
+    default: ROLE.USER,
   },
   active: {
     type: Boolean,
@@ -69,5 +72,5 @@ userSchema.methods.correctPassword = function (enteredPassword, savedPassword) {
   return hashed === encryptedPassword;
 };
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model(MODEL.USER_MODEL, userSchema);
 module.exports = User;
