@@ -14,7 +14,7 @@ const createSignToken = (user, res) => {
     expiresIn: process.env.JWT_EXPIRES_AT,
   });
 
-  res.status(200).json({ status: "success", token });
+  res.status(200).json({ status: "success", user, token });
 };
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -37,6 +37,12 @@ exports.login = catchAsync(async (req, res, next) => {
  * function :- It creates a new user
  */
 exports.signup = catchAsync(async (req, res, next) => {
+  const isUserExist = await User.findOne({ email: req.body.email });
+  console.log(isUserExist);
+  if (isUserExist) {
+    return next(new AppError("User already exists", 200));
+  }
+
   const user = await User.create({
     name: req.body.name,
     email: req.body.email,

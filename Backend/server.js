@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === "development") {
     process.env.DB_PASSWORD
   );
 }
-
+console.log(db);
 mongoose
   .connect(db)
   .then(() => {
