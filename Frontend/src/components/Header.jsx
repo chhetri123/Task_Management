@@ -1,7 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutSuccess } from "../store/authSlice"; // replace with your actual action
-import react, { useState, useEffect, useRef } from "react";
+import { IoIosLogIn } from "react-icons/io";
+import Logout from "../components/Auth/Logout"; // replace with your actual action
+import React, { useState, useEffect, useRef } from "react";
 export default function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -26,10 +27,6 @@ export default function Header() {
     };
   });
 
-  const handleSignout = async () => {
-    dispatch(logoutSuccess());
-    navigate("/");
-  };
   const handleModel = () => {
     setShowMenu((prevShowMenu) => !prevShowMenu);
   };
@@ -52,7 +49,7 @@ export default function Header() {
               <div>
                 <button
                   type="button"
-                  className="inline-flex justify-center w-full bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2"
+                  className="inline-flex justify-center  items-center  w-full bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2"
                   id="options-menu"
                   onClick={handleModel}
                 >
@@ -61,6 +58,9 @@ export default function Header() {
                     src="https://pics.craiyon.com/2023-05-31/220e4c73f6674d46a84840ebde9f9bc8.webp"
                     alt=""
                   />
+                  <span className="items-center ml-3 font-bold text-xl">
+                    Profile
+                  </span>
                 </button>
               </div>
               {showMenu ? (
@@ -84,13 +84,7 @@ export default function Header() {
                       >
                         {user.email}
                       </div>
-                      <button
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                        role="menuitem"
-                        onClick={handleSignout}
-                      >
-                        Sign out
-                      </button>
+                      <Logout />
                     </div>
                   </div>
                 </>
@@ -99,9 +93,10 @@ export default function Header() {
           ) : (
             <Link
               to="/login"
-              className="text-sm  bg-blue-200  rounded-sm px-4 py-2 sm:text-xl font-semibold"
+              className="text-sm flex flex-row bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-500 rounded-lg px-4 py-2 sm:text-xl font-semibold"
             >
-              Login
+              Login &nbsp;
+              <IoIosLogIn className="mt-[2px] font-bold" size={25} />
             </Link>
           )}
         </div>

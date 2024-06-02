@@ -1,10 +1,10 @@
 // components/Register.js
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser, setError, defaultState } from "../store/authSlice";
+import { registerUser, setError, defaultState } from "../../store/authSlice";
 // import { setAlert } from "../store/alertSlice";
 import { Link, useNavigate } from "react-router-dom";
-import Alert from "./Alert";
+import Alert from "../Alert";
 
 const Register = () => {
   const [email, setEmail] = useState("");

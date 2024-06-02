@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser, defaultState } from "../store/authSlice";
+import { loginUser, defaultState } from "../../store/authSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,13 +17,8 @@ const Login = () => {
   };
 
   useEffect(() => {
+    console.log(status);
     if (status === "succeeded") {
-      // setAlert({
-      //   message: "Login successful",
-      //   type: "success",
-      //   show: true,
-      // });
-
       dispatch(defaultState());
       navigate("/");
     }
