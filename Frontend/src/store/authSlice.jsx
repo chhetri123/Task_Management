@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   status: null,
   error: null,
+  isLoggedIn: false,
 };
 
 export const loginUser = (credentials) => async (dispatch) => {
@@ -34,10 +35,28 @@ export const registerUser = (credentials) => async (dispatch) => {
     return dispatch(setError(error.response.data.message));
   }
 };
+export const isUserLoggedIn = () => async (dispatch) => {
+  try {
+    const response = await api.get("/auth/islogin");
+    if (response.data.status === "fail") {
+      return dispatch(setErrorIsLoggedIn(response.data.message));
+    }
+    if (response.data.status === "success") {
+      return dispatch(loginSuccess(response.data.user));
+    }
+  } catch (error) {
+    dispatch(setError(error.message));
+  }
+};
+export const logoutUser = () => async (dispatch) => {
+  try {
+    const response = await api.get("/auth/logout");
 
-export const logoutUser = () => (dispatch) => {
-  localStorage.removeItem("token"); // Remove token from localStorage
-  dispatch(logoutSuccess());
+    localStorage.removeItem("token"); // Remove token from localStorage
+    dispatch(logoutSuccess());
+  } catch (error) {
+    dispatch(setError(error.message));
+  }
 };
 
 // Slice for authentication
@@ -53,10 +72,13 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.status = "succeeded";
       state.error = null;
+      state.isLoggedIn = true;
     },
     logoutSuccess(state) {
       state.user = null;
       state.status = "idle";
+      state.error = null;
+      state.isLoggedIn = false;
     },
     registerSuccess(state, action) {
       state.user = action.payload;
@@ -66,6 +88,12 @@ const authSlice = createSlice({
     setError(state, action) {
       state.error = action.payload;
       state.status = "failed";
+    },
+    setErrorIsLoggedIn(state, action) {
+      state.error = action.payload;
+      state.status = "failed";
+      state.isLoggedIn = false;
+      state.user = null;
     },
   },
 });
@@ -77,6 +105,7 @@ export const {
   registerSuccess,
   defaultState,
   setLoading,
+  setErrorIsLoggedIn,
 } = authSlice.actions;
 
 export default authSlice.reducer;
