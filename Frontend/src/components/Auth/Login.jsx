@@ -17,12 +17,11 @@ const Login = () => {
   };
 
   useEffect(() => {
-    console.log(status);
     if (status === "succeeded") {
       dispatch(defaultState());
       navigate("/");
     }
-  }, [status, error, dispatch, navigate]);
+  }, [status]);
 
   return (
     <section className="flex justify-center items-center h-[80vh]">

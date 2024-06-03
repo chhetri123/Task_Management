@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import {
-  taskWithPagination,
-  searchTasks,
-  clearSearch,
-} from "../store/taskSlice";
+import { searchTasks, clearSearch } from "../store/taskSlice";
 
 //
 const SearchBar = () => {
@@ -26,7 +22,6 @@ const SearchBar = () => {
   const handleClear = () => {
     setQuery("");
     dispatch(clearSearch());
-    // dispatch(taskWithPagination({ page: 1, limit }));
   };
 
   return (

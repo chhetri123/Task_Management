@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCompletedTask, defaultState } from "../../store/taskSlice";
 import TaskList from "./TaskList";
 import TaskDetail from "./TaskDetail";
-import Pagination from "./Pagination";
 
 //
 const CompletedTask = () => {
@@ -21,7 +20,6 @@ const CompletedTask = () => {
     if (status === "succeeded") {
       dispatch(getCompletedTask());
       dispatch(defaultState());
-      console.log(comletedTask);
     }
   }, [status]);
 
@@ -40,10 +38,15 @@ const CompletedTask = () => {
           <span className="text-base"> ({comletedTask?.length || 0})</span>
         </h1>
         <div className="bg-white shadow rounded p-4 overflow-auto h-[100vh] scrollbar-hide">
-          {comletedTask &&
+          {comletedTask?.length === 0 ? (
+            <span className="text-sm text-gray-500">
+              No complete Task found !
+            </span>
+          ) : (
             comletedTask?.map((task, index) => (
               <TaskList key={index} task={task} onTaskClick={handleTaskClick} />
-            ))}
+            ))
+          )}
         </div>
       </div>
       {selectedTask && (

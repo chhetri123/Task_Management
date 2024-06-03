@@ -87,6 +87,7 @@ const TaskFormModal = ({
           </label>
           <input
             type="date"
+            min={formatDate(new Date())}
             {...register("dueDate", { required: "Due Date is required" })}
             className={`mt-1 p-2 border rounded w-full ${
               errors.dueDate ? "border-red-500" : "border-gray-300"

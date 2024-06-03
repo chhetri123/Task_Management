@@ -1,17 +1,20 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { IoIosLogIn } from "react-icons/io";
 import Logout from "../components/Auth/Logout"; // replace with your actual action
 import React, { useState, useEffect, useRef } from "react";
+
+//
 export default function Header() {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  //
   const [showMenu, setShowMenu] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const menuRef = useRef(null);
+
+  //
   useEffect(() => {
     setShowMenu(false);
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -41,8 +44,11 @@ export default function Header() {
           <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
             Task
           </span>
-          &nbsp; Manage
+          &nbsp; Manager
         </Link>
+        {user && user.role === "admin" ? (
+          <div className="text-2xl font-bold text-blue-900"> Admin Pannel</div>
+        ) : null}
         <div className="flex gap-6 " ref={menuRef}>
           {user ? (
             <div className="relative inline-block  text-left">

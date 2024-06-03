@@ -20,12 +20,12 @@ const CreatedTask = () => {
     currentPage,
     limit,
     search,
+    error,
   } = useSelector((state) => state.task);
   const [selectedTask, setSelectedTask] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("Initail Created Project Render");
     dispatch(getAllTask());
     dispatch(taskWithPagination({ ...sortOptions, page: currentPage, limit }));
   }, []);
@@ -64,15 +64,13 @@ const CreatedTask = () => {
           <TaskSorter />
         </div>
         <div className="bg-white shadow rounded p-4 overflow-auto h-[100vh] scrollbar-hide">
-          {task.length > 0
-            ? task.map((item, index) => (
-                <TaskList
-                  key={index}
-                  task={item}
-                  onTaskClick={handleTaskClick}
-                />
-              ))
-            : null}
+          {task.length > 0 ? (
+            task.map((item, index) => (
+              <TaskList key={index} task={item} onTaskClick={handleTaskClick} />
+            ))
+          ) : (
+            <span className="text-sm text-gray-500">No task found !!</span>
+          )}
         </div>
         <Pagination />
       </div>

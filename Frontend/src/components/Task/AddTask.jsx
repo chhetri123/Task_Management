@@ -17,7 +17,7 @@ const AddTask = () => {
   return (
     <>
       <button
-        className="flex bg-indigo-500 hover:bg-indigo-800 text-white font-semibold py-2 px-4 rounded shadow transition-colors duration-200"
+        className="flex bg-indigo-500 hover:bg-indigo-800 text-white font-semibold py-2 px-4 rounded shadow transition-colors duration-200 sm:w-32 sm:py-1 sm:px-2 "
         onClick={() => setIsModalOpen(true)}
       >
         <FaPlus className="mt-[1px] mr-3" size={18} />

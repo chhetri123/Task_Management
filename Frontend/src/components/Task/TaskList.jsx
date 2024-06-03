@@ -14,6 +14,7 @@ const TaskList = ({ task, onTaskClick }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [IsModalOpen, setIsModalOpen] = useState(false);
   const { status } = useSelector((state) => state.task);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const handleEdit = async (updatedTask) => {
@@ -35,6 +36,11 @@ const TaskList = ({ task, onTaskClick }) => {
         <div className="w-2/3">
           <h2 className="text-base font-semibold truncate hover:underline focus:cursor-pointer">
             {task.title}
+            {user.role === "admin" && (
+              <span className="text-gray-500 text-xs">
+                &nbsp; (By <i> @{task.owner.name.split(" ")[0]} </i> )
+              </span>
+            )}
           </h2>
         </div>
         <div className="flex items-center space-x-5 w-1/3 justify-end">

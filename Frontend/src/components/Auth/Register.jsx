@@ -1,8 +1,7 @@
 // components/Register.js
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser, setError, defaultState } from "../../store/authSlice";
-// import { setAlert } from "../store/alertSlice";
+import { registerUser, setError } from "../../store/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import Alert from "../Alert";
 
@@ -12,8 +11,9 @@ const Register = () => {
   const [conformPassword, setconformPassword] = useState("");
   const [name, setName] = useState("");
   const dispatch = useDispatch();
-  const { status: state, error } = useSelector((state) => state.auth);
-  const [alert, setAlert] = useState({ show: false, message: "", type: "" });
+  const { status, error } = useSelector((state) => state.auth);
+
+  //
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -23,15 +23,13 @@ const Register = () => {
       return;
     }
     dispatch(registerUser({ name, email, password, conformPassword }));
+    if (status === "succeeded") {
+      navigate("/");
+    }
   };
 
   useEffect(() => {
-    if (state === "succeeded") {
-      // setAlert({
-      //   message: "Registration successful",
-      //   type: "success",
-      //   show: true,
-      // });
+    if (status === "succeeded") {
       dispatch(defaultState());
       navigate("/");
     }
