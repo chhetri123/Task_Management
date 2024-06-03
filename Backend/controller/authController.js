@@ -38,7 +38,6 @@ exports.login = catchAsync(async (req, res, next) => {
  */
 exports.signup = catchAsync(async (req, res, next) => {
   const isUserExist = await User.findOne({ email: req.body.email });
-  console.log(isUserExist);
   if (isUserExist) {
     return next(new AppError("User already exists", 200));
   }
@@ -117,4 +116,11 @@ exports.authorizedTo = (...roles) => {
 
     next();
   };
+};
+
+exports.isLoggedIn = (req, res, next) => {
+  res.status(201).json({
+    status: "success",
+    user: req.user,
+  });
 };

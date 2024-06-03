@@ -19,7 +19,7 @@ class ApiFeature {
     /*G et the query string and replace the query string 
     with the query string with the dollar sign for monoDB match Properties */
     queryStr = queryStr.replace(
-      /\b(gte|lte|gt|lt|in)\b/g,
+      /\b(gte|lte|gt|lt|in|ne)\b/g,
       (match) => `$${match}`
     );
 

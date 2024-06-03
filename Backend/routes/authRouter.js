@@ -28,4 +28,6 @@ router.route("/register").post(authController.signup);
  */
 router.route("/logout").get(authController.logout);
 
+router.route("/islogin").get(authController.protect, authController.isLoggedIn);
+
 module.exports = router;
