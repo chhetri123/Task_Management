@@ -33,7 +33,7 @@ const taskSchema = new mongoose.Schema({
     {
       type: String,
       trim: true,
-      maxlength: [10, "Tag must be at most 10 characters"],
+      maxlength: [20, "Tag must be at most 20 characters"],
       default: [],
     },
   ],

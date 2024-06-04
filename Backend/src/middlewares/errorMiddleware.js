@@ -82,7 +82,6 @@ module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
   if (process.env.NODE_ENV === "development") {
-    console.log(err);
     sendDevError(err, res);
   } else if (process.env.NODE_ENV === "production") {
     let error = JSON.parse(JSON.stringify(err));
@@ -92,7 +91,7 @@ module.exports = (err, req, res, next) => {
     if (error.name === "TokenExpiredError") error = sendTokenExpired();
     if (error.name === "ValidationError") error = sendValidationError(error);
     if (error.code === 11000) {
-      const message = `Duplicate field value entered`;
+      const message = `Field already exists . Please use another value`;
       error = new AppError(message, 400);
     }
     sendProdError(error, res);

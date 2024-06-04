@@ -1,6 +1,7 @@
-const User = require("./../model/userModel");
+const User = require("./../models/userModel");
 const AppError = require("./../utils/appError");
 const catchAsync = require("./../utils/catchAsync");
+const { jwtExpireAt, jwtSecret } = require("../config/envConfig");
 const jwt = require("jsonwebtoken");
 
 /**
@@ -10,8 +11,8 @@ const jwt = require("jsonwebtoken");
  */
 const createSignToken = (user, res) => {
   user.password = undefined;
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: process.env.JWT_EXPIRES_AT,
+  const token = jwt.sign({ id: user._id }, jwtSecret, {
+    expiresIn: jwtExpireAt,
   });
 
   res.status(200).json({ status: "success", user, token });
@@ -52,34 +53,6 @@ exports.signup = catchAsync(async (req, res, next) => {
   createSignToken(user, res);
 });
 
-/**
- * Protects the route.
- * @function protect
- * @async
- * @param {Object} req - The request object.
- * @param {Object} res - The response object.
- * @param {Function} next - The next middleware function.
- * funtion :- It protect all the routes which require authentication
- */
-
-exports.protect = catchAsync(async (req, res, next) => {
-  if (
-    !req.headers.authorization ||
-    !req.headers.authorization.startsWith("Bearer")
-  ) {
-    return next(new AppError("Please login or Sign Up"), 401);
-  }
-  const token = req.headers.authorization.split(" ")[1];
-  const decode = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  const user = await User.findById(decode.id);
-  if (!user) {
-    return next(new AppError("User belongs to this token does not exist"), 401);
-  }
-
-  req.user = user;
-  next();
-});
-
 //
 /**
  * Logs out the user.
@@ -94,28 +67,8 @@ exports.logout = (req, res) => {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
   });
+
   res.status(200).json({ status: "success" });
-};
-
-//  Authorization Middle Authentication
-/**
- * Checks if the user is authorized to perform an action.
- * @function authorizedTo
- * @param {Array} roles - The roles array.
- * @returns {Function} The middleware function.
- * funtion :- It checks if the user is authorized to perform an action
- */
-exports.authorizedTo = (...roles) => {
-  // roles=["user","admin"]
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return next(
-        new AppError("You do not have permission to do this action", 403)
-      );
-    }
-
-    next();
-  };
 };
 
 exports.isLoggedIn = (req, res, next) => {
@@ -124,3 +77,5 @@ exports.isLoggedIn = (req, res, next) => {
     user: req.user,
   });
 };
+
+exports.createSignToken = createSignToken;

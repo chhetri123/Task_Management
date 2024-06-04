@@ -1,10 +1,10 @@
 const express = require("express");
-const authController = require("../controller/authController");
-const userController = require("../controller/userController");
+const authMiddleware = require("../middlewares/authMiddleware");
+const userController = require("../controllers/userController");
 const router = express.Router();
 
 // Protect routes
-router.use(authController.protect);
+router.use(authMiddleware.protect);
 
 /**
  *
@@ -14,5 +14,5 @@ router.use(authController.protect);
  */
 router
   .route("/")
-  .get(authController.authorizedTo("admin"), userController.getUsers);
+  .get(authMiddleware.authorizedTo("admin"), userController.getUsers);
 module.exports = router;

@@ -4,7 +4,7 @@
  * @module TaskController
  */
 
-const Task = require("./../model/taskModel");
+const Task = require("./../models/taskModel");
 const catchAsync = require("./../utils/catchAsync");
 const AppError = require("./../utils/appError");
 const AppFeature = require("./../utils/apiFeatures");
