@@ -54,9 +54,11 @@ const sortObject = (sort) => {
     case "oldest":
       return { sort: "-createdAt" };
     case "title":
-      return { sort: "-title" };
+      return { sort: "title" };
     case "dueDate":
       return { sort: "dueDate" };
+    case "high":
+      return { sort: "priority" };
     default:
       return { sort: "createdAt" };
   }
