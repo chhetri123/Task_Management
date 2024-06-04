@@ -1,17 +1,15 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { IoIosLogIn } from "react-icons/io";
-import Logout from "../components/Auth/Logout"; // replace with your actual action
+import Logout from "../components/Auth/Logout";
 import React, { useState, useEffect, useRef } from "react";
 
 //
 export default function Header() {
-  //
   const [showMenu, setShowMenu] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const menuRef = useRef(null);
 
-  //
   useEffect(() => {
     setShowMenu(false);
   }, []);
