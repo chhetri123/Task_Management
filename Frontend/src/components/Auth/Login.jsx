@@ -8,14 +8,15 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.auth);
-  // const [alert, setAlert] = useState({ message: "", type: "", show: false });
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(loginUser({ email, password }));
   };
-
+  useEffect(() => {
+    dispatch(defaultState());
+  }, []);
   useEffect(() => {
     if (status === "succeeded") {
       dispatch(defaultState());

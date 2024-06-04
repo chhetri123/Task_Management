@@ -1,9 +1,7 @@
-// components/Register.js
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser, setError } from "../../store/authSlice";
+import { registerUser, setError, defaultState } from "../../store/authSlice";
 import { Link, useNavigate } from "react-router-dom";
-import Alert from "../Alert";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -12,34 +10,35 @@ const Register = () => {
   const [name, setName] = useState("");
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.auth);
-
-  //
   const navigate = useNavigate();
 
+  useEffect(() => {
+    dispatch(defaultState());
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password.length < 8) {
+      dispatch(setError("Password must be at least 8 characters"));
+      return;
+    }
     if (password !== conformPassword) {
       dispatch(setError("Passwords do not match"));
       return;
     }
     dispatch(registerUser({ name, email, password, conformPassword }));
-    if (status === "succeeded") {
-      navigate("/");
-    }
   };
-
   useEffect(() => {
     if (status === "succeeded") {
       dispatch(defaultState());
       navigate("/");
     }
-  });
+  }, [status]);
 
   return (
     <section className="flex justify-center items-center h-[90vh] bg-gray-100">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-lg w-1/3"
+        className="bg-white p-6 rounded shadow-md w-full max-w-md"
       >
         <h2 className="text-2xl mb-4 text-center font-bold text-gray-700">
           Register
