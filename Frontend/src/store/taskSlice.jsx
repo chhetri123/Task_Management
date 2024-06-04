@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import api from "../services/api";
 
 const initialState = {
@@ -20,12 +20,13 @@ export const createTask = (task) => async (dispatch) => {
       return dispatch(setError(response.data.message));
     }
     if (response.data.status === "success") {
-      dispatch(createTaskSuccess(response.data.task));
+      dispatch(taskSuccess(response.data.task));
       dispatch(getAllTask());
       dispatch(getCompletedTask());
     }
   } catch (error) {
-    dispatch(setError(error.message));
+    const errMsg = JSON.parse(error.response.data.message);
+    dispatch(setError(Object.values(errMsg).join("")));
   }
 };
 ``;
@@ -38,7 +39,7 @@ export const editTask = (task) => async (dispatch) => {
       return dispatch(setError(response.data.message));
     }
     if (response.data.status === "success") {
-      dispatch(editTaskSuccess());
+      dispatch(taskSuccess());
     }
   } catch (error) {
     dispatch(setError(error.message));
@@ -48,9 +49,9 @@ export const deleteTask = (taskId) => async (dispatch) => {
   try {
     const resposne = await api.delete(`/tasks/${taskId}`);
     if (resposne.status === "success") {
-      dispatch(deleteTaskSuccess());
+      dispatch(taskSuccess());
     }
-    dispatch(deleteTaskSuccess());
+    dispatch(taskSuccess());
   } catch (error) {
     dispatch(setError(error.message));
   }
@@ -77,7 +78,9 @@ export const getAllTask = (params) => async (dispatch) => {
 export const getCompletedTask = () => async (dispatch) => {
   try {
     const response = await api.get(`/tasks`, {
-      params: { status: "completed" },
+      params: {
+        status: "completed",
+      },
     });
     if (response.data.status === "fail") {
       return dispatch(setError(response.data.message));
@@ -133,15 +136,7 @@ const taskSlice = createSlice({
       state.status = "idle";
       state.error = null;
     },
-    createTaskSuccess(state) {
-      state.status = "succeeded";
-      state.error = null;
-    },
-    editTaskSuccess(state) {
-      state.status = "succeeded";
-      state.error = null;
-    },
-    deleteTaskSuccess(state) {
+    taskSuccess(state) {
       state.status = "succeeded";
       state.error = null;
     },
@@ -189,13 +184,11 @@ const taskSlice = createSlice({
 });
 
 export const {
-  editTaskSuccess,
-  deleteTaskSuccess,
   getAllTaskSuccess,
   setError,
   defaultState,
   setLoading,
-  createTaskSuccess,
+  taskSuccess,
   completedTaskSuccess,
   taskInitalState,
   setSortingTask,

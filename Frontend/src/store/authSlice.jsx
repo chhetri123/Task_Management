@@ -24,6 +24,7 @@ export const loginUser = (credentials) => async (dispatch) => {
 export const registerUser = (credentials) => async (dispatch) => {
   try {
     const response = await api.post("/auth/register", credentials);
+    console.log(response.data.message);
     if (response.data.status === "fail") {
       return dispatch(setError(response.data.message));
     }
@@ -32,14 +33,15 @@ export const registerUser = (credentials) => async (dispatch) => {
       return dispatch(registerSuccess(response.data.user));
     }
   } catch (error) {
-    return dispatch(setError(error.response.data.message));
+    const errMsg = JSON.parse(error.response.data.message);
+    return dispatch(setError(errMsg.password || errMsg.email || errMsg.name));
   }
 };
 export const isUserLoggedIn = () => async (dispatch) => {
   try {
     const response = await api.get("/auth/islogin");
     if (response.data.status === "fail") {
-      return dispatch(setErrorIsLoggedIn(response.data.message));
+      return dispatch(setErrorLoggedIn(response.data.message));
     }
     if (response.data.status === "success") {
       return dispatch(loginSuccess(response.data.user));
@@ -50,8 +52,7 @@ export const isUserLoggedIn = () => async (dispatch) => {
 };
 export const logoutUser = () => async (dispatch) => {
   try {
-    const response = await api.get("/auth/logout");
-
+    await api.get("/auth/logout");
     localStorage.removeItem("token"); // Remove token from localStorage
     dispatch(logoutSuccess());
   } catch (error) {
@@ -84,12 +85,13 @@ const authSlice = createSlice({
       state.user = action.payload;
       state.status = "succeeded";
       state.error = null;
+      state.isLoggedIn = true;
     },
     setError(state, action) {
       state.error = action.payload;
       state.status = "failed";
     },
-    setErrorIsLoggedIn(state, action) {
+    setErrorLoggedIn(state, action) {
       state.error = action.payload;
       state.status = "failed";
       state.isLoggedIn = false;
@@ -105,7 +107,7 @@ export const {
   registerSuccess,
   defaultState,
   setLoading,
-  setErrorIsLoggedIn,
+  setErrorLoggedIn,
 } = authSlice.actions;
 
 export default authSlice.reducer;
