@@ -1,15 +1,13 @@
-version: "3.1"
+version: "3"
 services:
   backend:
     build: ./Backend
     container_name: task_management_backend
     volumes:
       - ./Backend:/usr/src/app
-    command: npm run dev
+    command: npm start
     env_file:
-      - ./Backend/config.env
-    environment:
-      - MONGODB_URI_DEV=mongodb://root:example@mongo_db:27017/
+      - ./Backend/.env.${NODE_ENV}
     ports:
       - "8000:8000"
     depends_on:
@@ -24,3 +22,31 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     ports:
       - "27017:27017"
+    logging:
+      driver: "none"
+
+  backend_test:
+    build: ./Backend
+    container_name: task_management_backend_test
+    volumes:
+      - ./Backend:/usr/src/app
+    command: npm test
+    env_file:
+      - ./Backend/.env.development
+    depends_on:
+      - mongo_db
+
+  frontend:
+    build: ./Frontend
+    container_name: task_management_frontend
+    volumes:
+      - ./Frontend:/usr/src/app
+    ports:
+      - "3000:80"
+    environment:
+      VITE_APP_BASE_URL: http://localhost:8000/api/v1
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+      - backend_test
