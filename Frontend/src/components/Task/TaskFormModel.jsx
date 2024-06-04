@@ -1,23 +1,9 @@
-// src/components/TaskFormModle.js
-
 import React, { useEffect } from "react";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import { formatDate } from "../../utils/helper";
 
-const defaultMessage = {
-  heading: "Add edit Task",
-  taskId: 1,
-  button: "Add Task",
-  data: "",
-};
-
-const TaskFormModal = ({
-  isOpen,
-  onRequestClose,
-  onSubmit,
-  message = defaultMessage,
-}) => {
+const TaskFormModal = ({ isOpen, onRequestClose, onSubmit, message = {} }) => {
   const {
     register,
     handleSubmit,
@@ -27,7 +13,7 @@ const TaskFormModal = ({
   } = useForm();
 
   useEffect(() => {
-    if (message.data) {
+    if (isOpen && message.data) {
       setValue("_id", message.data._id);
       setValue("title", message.data.title);
       setValue("description", message.data.description);
@@ -36,7 +22,7 @@ const TaskFormModal = ({
       setValue("tags", message.data.tags);
       setValue("priority", message.data.priority);
     }
-  }, [message.data]);
+  }, [isOpen]);
 
   const handleFormSubmit = (newTask) => {
     newTask.tags =
@@ -47,6 +33,7 @@ const TaskFormModal = ({
     reset();
     onRequestClose();
   };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -63,7 +50,13 @@ const TaskFormModal = ({
           </label>
           <input
             type="text"
-            {...register("title", { required: "Title is required" })}
+            {...register("title", {
+              required: "Title is required",
+              minLength: {
+                value: 3,
+                message: "Title should be at least 3 characters",
+              },
+            })}
             className={`mt-1 p-2 border rounded w-full ${
               errors.title ? "border-red-500" : "border-gray-300"
             }`}
@@ -88,7 +81,12 @@ const TaskFormModal = ({
           <input
             type="date"
             min={formatDate(new Date())}
-            {...register("dueDate", { required: "Due Date is required" })}
+            {...register("dueDate", {
+              required: "Due Date is required",
+              validate: (value) =>
+                new Date(value) > new Date() ||
+                "Due date should be greater than today's date",
+            })}
             className={`mt-1 p-2 border rounded w-full ${
               errors.dueDate ? "border-red-500" : "border-gray-300"
             }`}
@@ -104,7 +102,7 @@ const TaskFormModal = ({
           <select
             defaultValue={"open"}
             {...register("status")}
-            className={`mt-1 p-2 border rounded w-full border-gray-300`}
+            className="mt-1 p-2 border rounded w-full border-gray-300"
           >
             <option value="open">Open</option>
             <option value="in_progress">In Progress</option>
@@ -117,7 +115,12 @@ const TaskFormModal = ({
           </label>
           <input
             type="text"
-            {...register("tags")}
+            {...register("tags", {
+              validate: (value) =>
+                value === "" ||
+                value.split(",").map((tag) => tag.trim()).length <= 10,
+              message: "Tags should be less than 10",
+            })}
             className="mt-1 p-2 border rounded w-full border-gray-300"
             placeholder="Comma separated tags"
           />
@@ -132,7 +135,7 @@ const TaskFormModal = ({
           <select
             {...register("priority")}
             defaultValue={"low"}
-            className={"mt-1 p-2 border rounded w-full border-gray-300"}
+            className="mt-1 p-2 border rounded w-full border-gray-300"
           >
             <option value="low">Low</option>
             <option value="medium">Medium</option>

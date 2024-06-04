@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import TaskFormModal from "./TaskFormModel";
-import { useSelector, useDispatch } from "react-redux";
-import { createTask, getAllTask, defaultState } from "../../store/taskSlice";
+import { useDispatch } from "react-redux";
+import { createTask, defaultState } from "../../store/taskSlice";
 
 const AddTask = () => {
   const [IsModalOpen, setIsModalOpen] = useState(false);
-
   const dispatch = useDispatch();
-
   const handleAddTask = async (newTask) => {
     dispatch(createTask(newTask));
     dispatch(defaultState());
@@ -17,7 +15,7 @@ const AddTask = () => {
   return (
     <>
       <button
-        className="flex bg-indigo-500 hover:bg-indigo-800 text-white font-semibold py-2 px-4 rounded shadow transition-colors duration-200 sm:w-32 sm:py-1 sm:px-2 "
+        className="flex bg-indigo-500 hover:bg-indigo-800 text-white font-semibold justify-center items-center px-2 py-2 sm:px-4 sm:py-3  lg:px-4 lg:py-2"
         onClick={() => setIsModalOpen(true)}
       >
         <FaPlus className="mt-[1px] mr-3" size={18} />

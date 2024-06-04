@@ -1,5 +1,3 @@
-// src/components/TaskDetails.js
-
 import React, { useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { FaCalendarAlt, FaFlag, FaInfoCircle, FaHashtag } from "react-icons/fa";
@@ -14,14 +12,12 @@ const TaskDetail = ({ task, onClose }) => {
   const menuRef = useRef(null);
   const { user } = useSelector((state) => state.auth);
 
-  //
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         onClose();
       }
     };
-
     const timer = setTimeout(() => {
       window.addEventListener("click", handleClickOutside);
     }, 200);
@@ -31,17 +27,6 @@ const TaskDetail = ({ task, onClose }) => {
     };
   }, [task]);
 
-  const {
-    title,
-    description,
-    dueDate,
-    createdAt,
-    status,
-    owner,
-    tags,
-    priority,
-  } = task;
-
   return (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
       <div
@@ -49,7 +34,7 @@ const TaskDetail = ({ task, onClose }) => {
         ref={menuRef}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-semibold">{title}</h2>
+          <h2 className="text-2xl font-semibold">{task.title}</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600"
@@ -61,21 +46,22 @@ const TaskDetail = ({ task, onClose }) => {
           <div className="flex items-center">
             <FaCalendarAlt className="mr-2 text-gray-600" />
             <p>
-              <strong>Due date:</strong> {dateToMonth_Day(dueDate)}
+              <strong>Due date:</strong>{" "}
+              {dateToMonth_Day(task.dueDate).split(",")[0]}
             </p>
           </div>
           <div className="flex items-center">
             <FaCalendarAlt className="mr-2 text-gray-600" />
             <p>
-              <strong>Start date:</strong> {dateToMonth_Day(createdAt)}
+              <strong>Start date:</strong> {dateToMonth_Day(task.createdAt)}
             </p>
           </div>
           <div className="flex items-center">
             <FaFlag
-              className={`mr-2 ${priorityColors[priority.toLowerCase()]}`}
+              className={`mr-2 ${priorityColors[task.priority.toLowerCase()]}`}
             />
             <p>
-              <strong>Priority:</strong> {priority}
+              <strong>Priority:</strong> {task.priority}
             </p>
           </div>
           <div className="flex items-center">
@@ -83,21 +69,21 @@ const TaskDetail = ({ task, onClose }) => {
             &nbsp;
             <span
               className={`mr-2 px-2 py-1 rounded-full text-white ${
-                statusColors[status.toLowerCase()]
+                statusColors[task.status.toLowerCase()]
               }`}
             >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+              {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
             </span>
           </div>
           <div>
             <strong>Description:</strong>
-            <p className="mt-1">{description}</p>
+            <p className="mt-1">{task.description}</p>
           </div>
           <div>
             <strong>Tags:</strong>
             <div className="flex flex-col justify-between mt-2">
               <div className="flex flex-wrap mt-2">
-                {tags.map((tag, index) => (
+                {task.tags.map((tag, index) => (
                   <span
                     key={index}
                     className="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-sm mr-2 mb-2"
@@ -108,7 +94,7 @@ const TaskDetail = ({ task, onClose }) => {
               </div>
               {user.role === "admin" && (
                 <span className="text-gray-500 text-xs">
-                  &nbsp; (By <i> @{owner.name.split(" ")[0]} </i> )
+                  &nbsp; (By <i> @{task.owner.name.split(" ")[0]} </i> )
                 </span>
               )}
             </div>

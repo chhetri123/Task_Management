@@ -40,7 +40,7 @@ const CompletedTask = () => {
         <div className="bg-white shadow rounded p-4 overflow-auto h-[100vh] scrollbar-hide">
           {comletedTask?.length === 0 ? (
             <span className="text-sm text-gray-500">
-              No complete Task found !
+              No complete Task found !!!!
             </span>
           ) : (
             comletedTask?.map((task, index) => (

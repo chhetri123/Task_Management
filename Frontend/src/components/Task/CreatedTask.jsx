@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import TaskList from "./TaskList";
 import TaskSorter from "./TaskSorter";
 import TaskDetail from "./TaskDetail";
@@ -60,7 +59,6 @@ const CreatedTask = () => {
             Your Tasks
             <span className="text-base">({totalTask})</span>
           </h1>
-
           <TaskSorter />
         </div>
         <div className="bg-white shadow rounded p-4 overflow-auto h-[100vh] scrollbar-hide">

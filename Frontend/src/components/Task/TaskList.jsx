@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaCheckCircle, FaEdit, FaTrashAlt, FaUndoAlt } from "react-icons/fa";
 import TaskFormModal from "./TaskFormModel";
 
 import { useDispatch, useSelector } from "react-redux";
-import { editTask, defaultState, deleteTask } from "../../store/taskSlice";
+import { editTask, deleteTask } from "../../store/taskSlice";
 import {
   getStatusIcon,
   getPriorityClass,
@@ -12,20 +12,21 @@ import {
 
 const TaskList = ({ task, onTaskClick }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [IsModalOpen, setIsModalOpen] = useState(false);
-  const { status } = useSelector((state) => state.task);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const handleEdit = async (updatedTask) => {
     dispatch(editTask(updatedTask));
   };
+
   const handleDeleteTask = () => {
     dispatch(deleteTask(task._id));
   };
+
   return (
     <div
-      className="relative border rounded-lg p-4 mb-4 shadow-md bg-white transition-transform duration-500 transform hover:scale-105"
+      className="relative border rounded-lg p-4 mb-4 shadow-md bg-white transition-transform duration-500 transform hover:scale-105 w-full sm:w-72 md:w-80 lg:w-96 xl:w-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -38,7 +39,7 @@ const TaskList = ({ task, onTaskClick }) => {
             {task.title}
             {user.role === "admin" && (
               <span className="text-gray-500 text-xs">
-                &nbsp; (By <i> @{task.owner.name.split(" ")[0]} </i> )
+                &nbsp; (By <i>@{task.owner.name.split(" ")[0]}</i>)
               </span>
             )}
           </h2>
@@ -54,24 +55,27 @@ const TaskList = ({ task, onTaskClick }) => {
           </span>
         </div>
       </div>
-      <div className="flex flex-row  justify-between items-center">
+      <div className="flex flex-row justify-between items-center">
         <p className="text-gray-500 text-xs">
           Start: {dateToMonth_Day(task.createdAt)}
         </p>
         <p className="text-gray-500 text-sm">
-          Due: {dateToMonth_Day(task.dueDate)}
+          Due: {dateToMonth_Day(task.dueDate).split(",")[0]}
         </p>
       </div>
-
-      <div className="mt-2 flex space-x-2">
-        {task.tags.map((tag) => (
-          <span
-            key={tag}
-            className="text-xs font-semibold bg-gray-200 rounded-full px-2 py-1"
-          >
-            {`#${tag}`}
-          </span>
-        ))}
+      <div className="mt-2 flex flex-wrap gap-1">
+        {task.tags.length < 1 ? (
+          <div className="px-2 py-3"></div>
+        ) : (
+          task.tags.map((tag) => (
+            <span
+              key={tag}
+              className="text-xs font-semibold bg-gray-200 rounded-full px-2 py-1 max-w-[80px] truncate"
+            >
+              {`#${tag}`}
+            </span>
+          ))
+        )}
       </div>
       {isHovered && (
         <div className="absolute bottom-4 right-8 sm:right-2 md:right-5 flex space-x-4 transition-opacity duration-1000">
@@ -100,19 +104,21 @@ const TaskList = ({ task, onTaskClick }) => {
           />
         </div>
       )}
-      <TaskFormModal
-        isOpen={IsModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        onSubmit={handleEdit}
-        message={{
-          heading: "Edit Task",
-          button: "Edit Task",
-          data: {
-            ...task,
-            tags: task.tags.join(","),
-          },
-        }}
-      />
+      {isModalOpen && (
+        <TaskFormModal
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+          onSubmit={handleEdit}
+          message={{
+            heading: "Edit Task",
+            button: "Edit Task",
+            data: {
+              ...task,
+              tags: task.tags.join(","),
+            },
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -22,6 +22,7 @@ const Pagination = () => {
       taskWithPagination({ ...sortOptions, page: currentPage, limit, search })
     );
   }, [dispatch, currentPage, limit]);
+
   return (
     <div className="flex items-center justify-center space-x-4 mt-4 mb-5">
       <button
