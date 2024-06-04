@@ -1,4 +1,3 @@
-// components/Home.js
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -17,12 +16,11 @@ const Home = () => {
       dispatch(isUserLoggedIn());
     }
   }, [dispatch, isLoggedIn]);
-
   return (
     <div className="flex flex-col justify-center mt-3 items-center overflow-hidden">
       <div className="flex justify-between items-center w-[70%] mb-4">
         <div></div>
-        <h1 className="text-3xl font-bold text-gray-800">Task List</h1>
+        <h1 className="text-2xl font-bold text-gray-700">Task List</h1>
         {isLoggedIn && user && user.role === "user" ? <AddTask /> : <div></div>}
       </div>
 
