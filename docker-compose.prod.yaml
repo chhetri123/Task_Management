@@ -1,0 +1,25 @@
+version: "3"
+services:
+  backend:
+    image: manishchhetri01/task_manage_backend:latest
+    container_name: task_management_backend
+    command: npm start
+    environment:
+      - MONGODB_URI=mongodb+srv://task_management:uKC7Bs03XS0XR7R5@cluster0.0qpsgno.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - JWT_SECRET_KEY=93c50188826419251a5ed7a63ef9dffc65fea36f
+      - JWT_EXPIRE_AT=1d
+      - PORT=8000
+    ports:
+      - "8000:8000"
+
+  frontend:
+    image: manishchhetri01/task_manager_frontend:latest
+    container_name: task_management_frontend
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_APP_BASE_URL=http://localhost:8000/api/v1
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
