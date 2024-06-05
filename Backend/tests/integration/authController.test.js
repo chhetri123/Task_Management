@@ -35,6 +35,7 @@ describe("Auth Controller Integration Tests", () => {
         email: "test@example.com",
         password: "password",
         conformPassword: "password",
+        role: "user",
       });
 
       expect(User.findOne).toHaveBeenCalledWith({ email: "test@example.com" });
