@@ -1,42 +1,65 @@
-# Task Management
+# Task Management backend
 
-## Installation
+Implemented using NodeJs and MongoDB for Database
 
-1. Clone the repository.
-2. Install the dependencies using the package manager of your choice:
-   ```bash
-   npm install
-   ```
-3. Create a `config.env` file in the root directory of your project and add the following variables:
+## Endpoints
 
-   ```plaintext
-        JWT_SECRET_KEY=
-        JWT_EXPIRES_AT=1d
-        PORT=8000
-        MONGODB_URI_PROD=
+- **/api/v1/auth**
 
-        DB_PASSWORD=
-        DB_USERNAME=task_management
+  - /login
+  - /register
+  - /logout
 
-        MONGODB_URI_DEV=mongodb://root:example@mongo_db:27017/
-   ```
+  - /islogin
 
-   Replace `VARIABLE_NAME` with the actual name of the variable and `VALUE` with the desired value.
+- **/api/v1/user**
 
-## Usage
+  - /users
 
-### Endpoints
-
-- /api/v1/auth
-  -/login
-  -/register
-  -/logout
-
-- /api/v1/user
-  -/
-- /api/v1/tasks
+- **/api/v1/tasks**
   - Get /
   - Get By Id /:id
   - Delete /:id
   - PUT /:id
   - Create /
+
+## Features
+
+- Authentication and Authorization
+- User and Admin Roles
+- Task Creation
+- Task read, edit, delete
+- Can be created by users only
+- Pagination, filtering, sorting, etc.
+- Search by task title and description
+
+## Installation
+
+1. Clone the repository.
+2. Install the dependencies using the package manager of your choice:
+
+   ```bash
+   cd Backend
+   npm install
+   ```
+
+3. Create a `.env.development` and `.env.production` file in the root directory of your project and add the following variables:
+
+   ```plaintext
+   JWT_SECRET_KEY=
+   JWT_EXPIRES_AT=1d
+   PORT=8000
+   MONGODB_URI_=
+   ```
+
+   Replace `VARIABLE_NAME` with the actual name of the variable and `VALUE` with the desired value.
+
+4. For testing
+
+   ```bash
+   npm test
+   ```
+
+## Complete Documentation
+
+For detailed documentation of the API endpoints, I have Created complete docs [here.Task Management backend ](https://documenter.getpostman.com/view/12338784/2sA3Qv8WFn).
