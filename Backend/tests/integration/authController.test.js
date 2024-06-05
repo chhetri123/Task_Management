@@ -21,6 +21,7 @@ describe("Auth Controller Integration Tests", () => {
         email: "test@example.com",
         password: "password",
         conformPassword: "password",
+        role: "user",
       };
 
       User.findOne.mockResolvedValue(null);
@@ -42,6 +43,7 @@ describe("Auth Controller Integration Tests", () => {
         email: "test@example.com",
         password: "password",
         conformPassword: "password",
+        role: "user",
       });
 
       expect(res.status).toBe(200);

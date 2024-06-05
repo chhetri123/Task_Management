@@ -95,6 +95,7 @@ describe("Authentication Testing ", () => {
         email: "test@gmail.com",
         password: "password",
         conformPassword: "password",
+        role: "user",
       };
       const token = "mockToken";
       jwt.sign.mockReturnValue(token);
