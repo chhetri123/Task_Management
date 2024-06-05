@@ -5,9 +5,8 @@ const env = process.env.NODE_ENV || "development";
 if (env === "development") {
   require("dotenv").config({ path: ".env.development" });
 } else if (env === "production") {
-  require("dotenv").config({ path: "../.env.production" });
+  require("dotenv").config({ path: ".env.production" });
 }
-
 module.exports = {
   port: process.env.PORT,
   nodeEnv: process.env.NODE_ENV,
