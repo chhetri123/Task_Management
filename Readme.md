@@ -65,7 +65,7 @@ Ensure that you have the following environment files in the `Backend` directory:
 - `env.development`
 - `env.production`
 
-These files should contain the necessary environment variables required for the backend application. Example content for `env.development`: You can keep the same for `mongodb_url` because it contains the same value as in the Docker Compose file in the development environment. For `env.production`, you can change it to your own environment values.
+These files should contain the necessary environment variables required for the backend application. Example content for `env.development`: You can keep the same for `MONGODB_URI` because it contains the same value as in the Docker Compose file in the development environment. For `env.production`, you can change it to your own environment values.
 
 ```.env
 JWT_SECRET_KEY=adhslkdhs
