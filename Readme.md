@@ -43,7 +43,7 @@ And checkout:
 - Frontend: `http://localhost:3000`
 - Backend: `http://localhost:8000/api/v1`
 
-⚠️ **Please note:** I have added the MongoDB credentials for demo purposes. These credentials might be deleted later. Please use them responsibly.
+⚠️ **Please note:** I have added the MongoDB setup credentials for demo purposes. These credentials might be deleted later. Please use them responsibly.
 
 ### 1. Clone the Repository
 
