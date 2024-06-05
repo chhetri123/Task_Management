@@ -21,6 +21,7 @@ const CreatedTask = () => {
     search,
     error,
   } = useSelector((state) => state.task);
+  const { user } = useSelector((state) => state.auth);
   const [selectedTask, setSelectedTask] = useState(null);
   const dispatch = useDispatch();
 
@@ -36,9 +37,6 @@ const CreatedTask = () => {
         taskWithPagination({ ...sortOptions, page: currentPage, limit, search })
       );
       dispatch(defaultState());
-    }
-    if (status === "failed") {
-      console.log(error);
     }
   }, [status]);
 
@@ -56,7 +54,7 @@ const CreatedTask = () => {
       <div className="mt-10">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">
-            Your Tasks
+            {user.role === "admin" ? "Remaining Task" : "My Remaining Task"}
             <span className="text-base">({totalTask})</span>
           </h1>
           <TaskSorter />

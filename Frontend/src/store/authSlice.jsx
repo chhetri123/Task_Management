@@ -10,6 +10,7 @@ const initialState = {
 
 export const loginUser = (credentials) => async (dispatch) => {
   try {
+    console.log(credentials);
     const response = await api.post("/auth/login", credentials);
     if (response.data.status === "fail") {
       return dispatch(setError(response.data.message));
@@ -24,7 +25,6 @@ export const loginUser = (credentials) => async (dispatch) => {
 export const registerUser = (credentials) => async (dispatch) => {
   try {
     const response = await api.post("/auth/register", credentials);
-    console.log(response.data.message);
     if (response.data.status === "fail") {
       return dispatch(setError(response.data.message));
     }
@@ -88,6 +88,7 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
     },
     setError(state, action) {
+      console.log(action.payload);
       state.error = action.payload;
       state.status = "failed";
     },

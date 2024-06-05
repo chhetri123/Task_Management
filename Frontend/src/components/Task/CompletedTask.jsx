@@ -11,7 +11,6 @@ const CompletedTask = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("Inital render");
     dispatch(getCompletedTask());
     dispatch(defaultState());
   }, []);

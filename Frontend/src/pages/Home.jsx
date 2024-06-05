@@ -12,7 +12,6 @@ const Home = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      console.log("User logged in");
       dispatch(isUserLoggedIn());
     }
   }, [dispatch, isLoggedIn]);

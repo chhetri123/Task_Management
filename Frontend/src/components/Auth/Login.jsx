@@ -60,6 +60,7 @@ const Login = () => {
         </div>
         <button
           type="submit"
+          name="login"
           className="w-full bg-blue-500 text-white p-2 rounded"
         >
           {status === "loading" ? "Logging in..." : "Login"}

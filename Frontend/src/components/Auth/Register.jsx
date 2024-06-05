@@ -6,15 +6,17 @@ import { Link, useNavigate } from "react-router-dom";
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [conformPassword, setconformPassword] = useState("");
+  const [conformPassword, setConformPassword] = useState("");
   const [name, setName] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(defaultState());
-  }, []);
+  }, [dispatch]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password.length < 8) {
@@ -25,14 +27,16 @@ const Register = () => {
       dispatch(setError("Passwords do not match"));
       return;
     }
-    dispatch(registerUser({ name, email, password, conformPassword }));
+    const role = isAdmin ? "admin" : "user";
+    dispatch(registerUser({ name, email, password, conformPassword, role }));
   };
+
   useEffect(() => {
     if (status === "succeeded") {
       dispatch(defaultState());
       navigate("/");
     }
-  }, [status]);
+  }, [status, navigate, dispatch]);
 
   return (
     <section className="flex justify-center items-center h-[90vh] bg-gray-100">
@@ -43,11 +47,11 @@ const Register = () => {
         <h2 className="text-2xl mb-4 text-center font-bold text-gray-700">
           Register
         </h2>
-        {error ? <p className="text-red-500 text-center">{error}</p> : null}
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <div className="mb-4">
           <label className="block mb-2 text-gray-600">Name</label>
           <input
-            type="name"
+            type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="border border-gray-300 p-2 rounded w-full focus:outline-none focus:border-blue-500"
@@ -79,14 +83,28 @@ const Register = () => {
           <input
             type="password"
             value={conformPassword}
-            onChange={(e) => setconformPassword(e.target.value)}
+            onChange={(e) => setConformPassword(e.target.value)}
             className="border border-gray-300 p-2 rounded w-full"
             required
           />
         </div>
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-          Register
-        </button>
+        <div className="mb-4 flex items-center">
+          <input
+            type="checkbox"
+            checked={isAdmin}
+            onChange={(e) => setIsAdmin(e.target.checked)}
+            className="mr-2 leading-tight"
+          />
+          <label className="text-gray-600">Is Admin</label>
+        </div>
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white p-2 rounded w-full max-w-xs"
+          >
+            Register
+          </button>
+        </div>
 
         <p className="mt-4 text-center">
           Already have an account?{" "}
@@ -95,7 +113,6 @@ const Register = () => {
           </Link>
         </p>
       </form>
-      {alert.show && <Alert message={alert.message} type={alert.type} />}
     </section>
   );
 };
