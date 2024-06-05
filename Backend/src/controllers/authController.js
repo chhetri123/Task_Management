@@ -1,6 +1,7 @@
 const User = require("./../models/userModel");
 const AppError = require("./../utils/appError");
 const catchAsync = require("./../utils/catchAsync");
+const { ROLE } = require("../utils/constant");
 const { jwtExpireAt, jwtSecret } = require("../config/envConfig");
 const jwt = require("jsonwebtoken");
 
@@ -42,12 +43,17 @@ exports.signup = catchAsync(async (req, res, next) => {
   if (isUserExist) {
     return next(new AppError("User already exists", 200));
   }
+  [];
 
+  if (ROLE[req.body.role.toUpperCase()] === undefined) {
+    return next(new AppError("Role does not exist", 404));
+  }
   const user = await User.create({
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     conformPassword: req.body.conformPassword,
+    role: req.body.role,
   });
 
   createSignToken(user, res);
