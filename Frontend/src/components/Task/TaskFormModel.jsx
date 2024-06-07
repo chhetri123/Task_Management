@@ -30,8 +30,9 @@ const TaskFormModal = ({ isOpen, onRequestClose, onSubmit, message = {} }) => {
         ? []
         : newTask.tags.split(",").map((tag) => tag.trim());
     onSubmit(newTask);
-    reset();
-    onRequestClose();
+    if (!isOpen) {
+      reset();
+    }
   };
 
   return (

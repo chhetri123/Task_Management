@@ -165,6 +165,10 @@ const taskSlice = createSlice({
       state.status = null;
       state.error = null;
       state.comletedTask = [];
+      state.totalTask = 0;
+      state.sortOptions = {};
+      state.currentPage = 1;
+      state.search = null;
     },
     getTaskWithPagination(state, action) {
       state.task = action.payload;

@@ -11,10 +11,11 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-
+import notificationSlice from "./notificationSlice";
 const rootReducer = combineReducers({
   auth: authSlice,
   task: taskSlice,
+  notification: notificationSlice,
 });
 
 const persistConfig = {

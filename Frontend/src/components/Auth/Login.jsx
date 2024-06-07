@@ -1,28 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser, defaultState } from "../../store/authSlice";
+import { loginUser, defaultState, setError } from "../../store/authSlice";
+import { showNotification } from "../../store/notificationSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     dispatch(loginUser({ email, password }));
   };
   useEffect(() => {
-    dispatch(defaultState());
-  }, []);
-  useEffect(() => {
     if (status === "succeeded") {
+      setIsLoading(false);
       dispatch(defaultState());
+      dispatch(
+        showNotification({
+          type: "success",
+          message: "You have successfully logged in",
+        })
+      );
+
       navigate("/");
     }
-  }, [status]);
+    if (status === "failed") {
+      setIsLoading(false);
+    }
+  }, [status, navigate, dispatch]);
 
   return (
     <section className="flex justify-center items-center h-[80vh]">
@@ -61,9 +72,10 @@ const Login = () => {
         <button
           type="submit"
           name="login"
+          disabled={isLoading}
           className="w-full bg-blue-500 text-white p-2 rounded"
         >
-          {status === "loading" ? "Logging in..." : "Login"}
+          {isLoading ? "Logging in..." : "Login"}
         </button>
         <p className="mt-4 text-center">
           Don't have an account?{" "}

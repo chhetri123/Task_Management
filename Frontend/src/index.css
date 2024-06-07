@@ -13,3 +13,8 @@ body {
     margin: 0;
 
 }
+
+.spinner-border {
+  border-color: #d1d5db; /* gray-300 */
+  border-top-color: #3b82f6; /* blue-500 */
+}

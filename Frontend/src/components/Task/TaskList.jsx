@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaCheckCircle, FaEdit, FaTrashAlt, FaUndoAlt } from "react-icons/fa";
 import TaskFormModal from "./TaskFormModel";
-
 import { useDispatch, useSelector } from "react-redux";
-import { editTask, deleteTask } from "../../store/taskSlice";
+import { editTask, deleteTask, defaultState } from "../../store/taskSlice";
+import { showNotification } from "../../store/notificationSlice";
 import {
   getStatusIcon,
   getPriorityClass,
@@ -13,16 +13,41 @@ import {
 const TaskList = ({ task, onTaskClick }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { user } = useSelector((state) => state.auth);
+  const { status } = useSelector((state) => state.task);
   const dispatch = useDispatch();
 
   const handleEdit = async (updatedTask) => {
+    setIsLoading(true);
     dispatch(editTask(updatedTask));
   };
 
   const handleDeleteTask = () => {
     dispatch(deleteTask(task._id));
   };
+  useEffect(() => {
+    if (status === "succeeded") {
+      setIsLoading(false);
+      setIsModalOpen(false);
+      dispatch(defaultState());
+      dispatch(
+        showNotification({
+          type: "success",
+          message: "Action done !!",
+        })
+      );
+    }
+    if (status === "failed") {
+      setIsLoading(false);
+      dispatch(
+        showNotification({
+          type: "error",
+          message: "An error occured while updating the task",
+        })
+      );
+    }
+  }, [status]);
 
   return (
     <div
@@ -111,7 +136,7 @@ const TaskList = ({ task, onTaskClick }) => {
           onSubmit={handleEdit}
           message={{
             heading: "Edit Task",
-            button: "Edit Task",
+            button: isLoading ? "Updating Task..." : "Update Task",
             data: {
               ...task,
               tags: task.tags.join(","),
