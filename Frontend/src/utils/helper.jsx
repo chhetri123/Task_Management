@@ -21,19 +21,20 @@ const dateToMonth_Day = (timestamp) => {
   return [month, day, `,${time}`].join(" ");
 };
 
-const getStatusIcon = (status) => {
-  switch (status) {
-    case "completed":
-      return <FaCheckCircle className="text-green-500" />;
-    case "in_progress":
-      return <FaHourglassHalf className="text-yellow-500" />;
-    case "open":
-      return <FaRegCircle className="" />;
-    default:
-      return null;
-  }
-};
-
+switch (status) {
+  case "completed":
+    return (
+      <FaCheckCircle tilte="Task is Completed" className="text-green-500" />
+    );
+  case "in_progress":
+    return (
+      <FaHourglassHalf title="Task In Progress" className="text-yellow-500" />
+    );
+  case "open":
+    return <FaRegCircle title="Task Open" className="" />;
+  default:
+    return null;
+}
 const getPriorityClass = (priority) => {
   switch (priority) {
     case "low":
