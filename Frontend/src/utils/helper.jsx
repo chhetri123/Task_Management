@@ -24,11 +24,15 @@ const dateToMonth_Day = (timestamp) => {
 const getStatusIcon = (status) => {
   switch (status) {
     case "completed":
-      return <FaCheckCircle className="text-green-500" />;
+      return (
+        <FaCheckCircle tilte="Task is Completed" className="text-green-500" />
+      );
     case "in_progress":
-      return <FaHourglassHalf className="text-yellow-500" />;
+      return (
+        <FaHourglassHalf title="Task In Progress" className="text-yellow-500" />
+      );
     case "open":
-      return <FaRegCircle className="" />;
+      return <FaRegCircle title="Task Open" className="" />;
     default:
       return null;
   }
