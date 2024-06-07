@@ -28,7 +28,11 @@ This task involves both Backend (Node.js) and Frontend (React.js), utilizing Mon
 └── docker-compose.yaml
 └── docker-compose.prod.yaml
 ```
-
+## Deployment
+ For Quick looks  you can check it from here:-
+ - Frontend URL https://prithak-task.netlify.app/
+ - Backend URL https://xdqe34wtsh.execute-api.us-east-1.amazonaws.com/dev/api/v1
+   
 ## Steps to Set Up the Project
 
 _To run the project without any configuration. Just download `docker-compose.prod.yaml` and run below command
