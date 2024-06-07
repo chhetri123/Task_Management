@@ -1,9 +1,11 @@
 const { port } = require("./config/envConfig");
 const databaseConnect = require("./config/dbConfig");
-
-const app = require("./index.js");
-
+const app = require("./index");
 databaseConnect();
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+
+if (process.env.NODE_ENV !== "production") {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
+module.exports = app;
