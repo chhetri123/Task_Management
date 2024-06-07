@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser, setError, defaultState } from "../../store/authSlice";
 import { Link, useNavigate } from "react-router-dom";
+import { showNotification } from "../../store/notificationSlice";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ const Register = () => {
   const [conformPassword, setConformPassword] = useState("");
   const [name, setName] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { status, error } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -28,13 +30,25 @@ const Register = () => {
       return;
     }
     const role = isAdmin ? "admin" : "user";
+    setIsLoading(true);
+
     dispatch(registerUser({ name, email, password, conformPassword, role }));
   };
 
   useEffect(() => {
     if (status === "succeeded") {
+      setIsLoading(false);
       dispatch(defaultState());
+      dispatch(
+        showNotification({
+          type: "success",
+          message: "You have successfully registered",
+        })
+      );
       navigate("/");
+    }
+    if (status === "failed") {
+      setIsLoading(false);
     }
   }, [status, navigate, dispatch]);
 
@@ -100,9 +114,10 @@ const Register = () => {
         <div className="flex justify-center">
           <button
             type="submit"
+            disabled={isLoading}
             className="bg-blue-500 text-white p-2 rounded w-full max-w-xs"
           >
-            Register
+            {isLoading ? "Registering ..." : "Register"}
           </button>
         </div>
 

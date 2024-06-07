@@ -1,16 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
 import TaskFormModal from "./TaskFormModel";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createTask, defaultState } from "../../store/taskSlice";
+import { showNotification } from "../../store/notificationSlice";
 
 const AddTask = () => {
   const [IsModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const { status } = useSelector((state) => state.task);
   const dispatch = useDispatch();
   const handleAddTask = async (newTask) => {
+    setLoading(true);
     dispatch(createTask(newTask));
-    dispatch(defaultState());
   };
+  useEffect(() => {
+    if (status === "succeeded") {
+      setLoading(false);
+      setIsModalOpen(false);
+      dispatch(defaultState());
+      dispatch(
+        showNotification({
+          type: "success",
+          message: "You have successfully added a new task",
+        })
+      );
+    }
+  }, [status, dispatch]);
 
   return (
     <>
@@ -21,15 +37,17 @@ const AddTask = () => {
         <FaPlus className="mt-[1px] mr-3" size={18} />
         Add Task
       </button>
-      <TaskFormModal
-        isOpen={IsModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        onSubmit={handleAddTask}
-        message={{
-          heading: "Add New Task",
-          button: "Add Task",
-        }}
-      />
+      {IsModalOpen && (
+        <TaskFormModal
+          isOpen={IsModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+          onSubmit={handleAddTask}
+          message={{
+            heading: "Add New Task",
+            button: isLoading ? "Adding Task..." : "Add Task",
+          }}
+        />
+      )}
     </>
   );
 };

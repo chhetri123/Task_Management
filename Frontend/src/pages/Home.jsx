@@ -1,24 +1,36 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import AddTask from "../components/Task/AddTask";
 import { isUserLoggedIn } from "../store/authSlice";
 import TaskCard from "../components/Task/TaskCard";
 import SearchBar from "../components/SearchBar";
+import Notification from "../components/Notification/Notification";
+import { hideNotification } from "../store/notificationSlice";
 
 const Home = () => {
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const notification = useSelector((state) => state.notification);
 
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(isUserLoggedIn());
     }
-  }, [dispatch, isLoggedIn]);
+  }, [dispatch, isLoggedIn, notification]);
   return (
     <div className="flex flex-col justify-center mt-3 items-center overflow-hidden">
+      {notification && (
+        <div className="fixed top-4 right-4 z-50">
+          <Notification
+            type={notification.type}
+            message={notification.message}
+            onClose={() => dispatch(hideNotification())}
+            duration={3000}
+          />
+        </div>
+      )}
       <div className="flex justify-between items-center w-[70%] mb-4">
-        <div></div>
         <h1 className="text-2xl font-bold text-gray-700">Task List</h1>
         {isLoggedIn && user && user.role === "user" ? <AddTask /> : <div></div>}
       </div>
