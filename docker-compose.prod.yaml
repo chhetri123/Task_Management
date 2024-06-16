@@ -5,7 +5,7 @@ services:
     container_name: task_management_backend
     command: npm start
     environment:
-      - MONGODB_URI=mongodb+srv://task_management:uKC7Bs03XS0XR7R5@cluster0.0qpsgno.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - MONGODB_URI=( Your Url)
       - JWT_SECRET_KEY=93c50188826419251a5ed7a63ef9dffc65fea36f
       - JWT_EXPIRE_AT=1d
       - PORT=8000
